@@ -4,7 +4,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <center>this is a test message for my initial commit trying</center>
+        <center>this is a test message to my initial commit trying</center>
+        
       </header>
     </div>
   );
