@@ -150,5 +150,6 @@ function App() {
       </Box>
     </Flex>
   );
+}
 
 export default App;
