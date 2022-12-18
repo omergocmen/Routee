@@ -14,19 +14,20 @@ import { FaLocationArrow, FaTimes } from "react-icons/fa";
 import {
   useJsApiLoader,
   GoogleMap,
+  Data,
   Marker,
   //TrafficLayer,
   Autocomplete,
   //TransitLayer,
   DirectionsRenderer,
 } from "@react-google-maps/api";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const center = { lat: 48.8584, lng: 2.2945 };
 
 function App() {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "",
+    googleMapsApiKey: "AIzaSyAJZoYbQOrF33cxskYA3gGvAOJ6N4_ifEo",
     libraries: ["places", "visualization"],
   });
 
@@ -34,6 +35,8 @@ function App() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
+  const [visible, setVisible] = useState("hidden")
+  const sidebar = document.getElementById("sidebar")
 
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef();
@@ -45,6 +48,7 @@ function App() {
   }
 
   async function calculateRoute() {
+    setVisible("visible")
     if (originRef.current.value === "" || destiantionRef.current.value === "") {
       return;
     }
@@ -70,14 +74,8 @@ function App() {
   }
 
   return (
-    <Flex
-      position="relative"
-      flexDirection="column"
-      alignItems="center"
-      h="100vh"
-      w="100vw"
-    >
-      <Box position="absolute" left={0} top={0} h="100%" w="100%">
+    <Flex position="relative" h="100vh" w="100vw">
+      <Box position="absolute" right={0} top={0} h="100%" w="100%">
         {/* Google Map Box */}
         <GoogleMap
           center={center}
@@ -95,7 +93,10 @@ function App() {
           <Marker position={center} />
           {/* <TrafficLayer position={center} /> */}
           {directionsResponse && (
-            <DirectionsRenderer directions={directionsResponse} />
+            <DirectionsRenderer
+              panel={sidebar}
+              directions={directionsResponse}
+            />
           )}
         </GoogleMap>
       </Box>
@@ -103,6 +104,8 @@ function App() {
         p={4}
         borderRadius="lg"
         m={4}
+        marginX="auto"
+        h="15%"
         bgColor="white"
         shadow="base"
         minW="container.md"
@@ -147,6 +150,18 @@ function App() {
             }}
           />
         </HStack>
+      </Box>
+      <Box
+        visibility={visible}
+        p={4}
+        borderRadius="lg"
+        bgColor="white"
+        shadow="base"
+        w="17%"
+        h="100%"
+        zIndex="1"
+      >
+        <div id="sidebar" style={{width: "100%",height:"100%",overflowY:"auto"}}></div>
       </Box>
     </Flex>
   );
