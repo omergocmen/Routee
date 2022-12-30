@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 import reportWebVitals from "./reportWebVitals";
+import "./App.css"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

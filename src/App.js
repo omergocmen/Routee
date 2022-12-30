@@ -12,13 +12,11 @@ import {
   HStack,
   IconButton,
   Input,
-  List,
-  ListItem,
-  Select,
   SkeletonText,
   Text,
   useToast,
 } from "@chakra-ui/react";
+
 import {
   FaBicycle,
   FaBuilding,
@@ -27,42 +25,40 @@ import {
   FaTimes,
   FaWalking,
 } from "react-icons/fa";
+
 import {
-  useJsApiLoader,
   GoogleMap,
-  Data,
   Marker,
-  //TrafficLayer,
   Autocomplete,
-  //TransitLayer,
   DirectionsRenderer,
   useLoadScript,
 } from "@react-google-maps/api";
-import { useEffect, useRef, useState } from "react";
 
-const center = { lat: 41.015137, lng: 28.97953 };
+import { useEffect, useRef, useState } from "react";
+import PoiListSection from "./components/poiListSection";
+import HistoryListSection from "./components/historyListSection";
 
 function App() {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAJZoYbQOrF33cxskYA3gGvAOJ6N4_ifEo",
-    libraries: ["places", "visualization"],
-  });
-
   const [directionsResponse, setDirectionsResponse] = useState(null);
-  const toast = useToast();
   const [travelMode, setTravelMode] = useState();
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [visiblePanel, setVisiblePanel] = useState("hidden");
-  const sidebar = document.getElementById("sidebar");
 
+  const sidebar = document.getElementById("sidebar");
   const originRef = useRef();
   const destiantionRef = useRef();
+
+  const toast = useToast();
 
   useEffect(() => {
     setTravelMode(google.maps.TravelMode.DRIVING);
   }, []);
 
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
+    libraries: JSON.parse(process.env.REACT_APP_MAP_LIB),
+  });
   if (!isLoaded) {
     return <SkeletonText />;
   }
@@ -79,8 +75,9 @@ function App() {
       travelMode: travelMode,
     });
     setDirectionsResponse(results);
-    setDistance(results.routes[0].legs[0].distance.text);
-    setDuration(results.routes[0].legs[0].duration.text);
+    const leg=results.routes[0].legs[0];
+    setDistance(leg.distance.text);
+    setDuration(leg.duration.text);
   }
 
   function clearRoute() {
@@ -89,7 +86,13 @@ function App() {
     originRef.current.value = "";
     destiantionRef.current.value = "";
   }
-
+  const center=JSON.parse(process.env.REACT_APP_MAP_CENTER);
+  const mapOptions={
+    zoomControl: false,
+    streetViewControl: false,
+    mapTypeControl: false,
+    fullscreenControl: false,
+  };
   return (
     <Flex position="relative" h="100vh" w="100vw">
       <Box position="absolute" right={0} top={0} h="100%" w="100%">
@@ -98,12 +101,7 @@ function App() {
           center={center}
           zoom={15}
           mapContainerStyle={{ width: "100%", height: "100%" }}
-          options={{
-            zoomControl: false,
-            streetViewControl: false,
-            mapTypeControl: false,
-            fullscreenControl: false,
-          }}
+          options={mapOptions}
         >
           {/* <TransitLayer /> */}
           <Marker position={center} />
@@ -162,14 +160,13 @@ function App() {
           <IconButton
             icon={<FaBus />}
             isRound
-            bg={travelMode===google.maps.TravelMode.TRANSIT?"blue.200":null}
+            bg={travelMode === google.maps.TravelMode.TRANSIT ? "blue.200" : null}
             onClick={() => {
               setTravelMode(google.maps.TravelMode.TRANSIT);
-              console.log(travelMode);
             }}
           />
           <IconButton
-            bg={travelMode===google.maps.TravelMode.DRIVING?"blue.200":null}
+            bg={travelMode === google.maps.TravelMode.DRIVING ? "blue.200" : null}
             icon={<FaCar />}
             isRound
             onClick={() => {
@@ -179,7 +176,7 @@ function App() {
           <IconButton
             icon={<FaWalking />}
             isRound
-            bg={travelMode===google.maps.TravelMode.WALKING?"blue.200":null}
+            bg={travelMode === google.maps.TravelMode.WALKING ? "blue.200" : null}
             onClick={() => {
               setTravelMode(google.maps.TravelMode.WALKING);
             }}
@@ -207,12 +204,12 @@ function App() {
         w={visiblePanel === "visible" ? "85%" : "100%"}
       >
         <AccordionItem>
-          <h2>
+          <Heading>
             <AccordionButton bg="yellow.300" justifyContent="center">
               <Box as="span">Popüler Varış Noktaları</Box>
               <AccordionIcon />
             </AccordionButton>
-          </h2>
+          </Heading>
           <AccordionPanel>
             <Box
               p={4}
@@ -225,187 +222,9 @@ function App() {
               h="28%"
               zIndex="1"
             >
-              <Box
-                w="30%"
-                maxH="250px"
-                minH="240px"
-                overflowY="auto"
-                bg="HighlightText"
-                h="full"
-                shadow="dark-lg"
-                rounded="lg"
-              >
-                <Heading size="md" m="5px" textAlign="center">
-                  En Çok Ziyaret Edilenler
-                </Heading>
-                <Box px="15px">
-                  <Select placeholder="Kategori Seçiniz">
-                    <option value="option1">Müze</option>
-                    <option value="option2">Sinema</option>
-                    <option value="option3">Restoran</option>
-                  </Select>
-                </Box>
-                <Box px="15px" py="5px" overflowY="visible">
-                  <List>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                  </List>
-                </Box>
-              </Box>
-              <Box
-                w="30%"
-                maxH="250px"
-                bg="HighlightText"
-                minH="240px"
-                overflowY="auto"
-                h="full"
-                shadow="dark-lg"
-                rounded="lg"
-              >
-                <Heading size="md" m="5px" textAlign="center">
-                  Daha Önce Buradan Ziyaret Edilenler
-                </Heading>
-                <Box px="15px" py="5px" overflowY="visible">
-                  <List>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                  </List>
-                </Box>
-              </Box>
-              <Box
-                w="30%"
-                maxH="250px"
-                minH="240px"
-                bg="HighlightText"
-                overflowY="auto"
-                h="full"
-                shadow="dark-lg"
-                rounded="lg"
-              >
-                <Heading size="md" m="5px" textAlign="center">
-                  Daha Önce Buradan Ziyaret Edilenler
-                </Heading>
-                <Box px="15px" py="5px" overflowY="visible">
-                  <List>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                    <ListItem
-                      shadow="dark-lg"
-                      display="flex"
-                      rounded="lg"
-                      p="5px"
-                      my="3px"
-                    >
-                      <FaBuilding fontSize="20px" />
-                      <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-                    </ListItem>
-                  </List>
-                </Box>
-              </Box>
+              <PoiListSection/>
+              <HistoryListSection/>
+              <HistoryListSection/>
             </Box>
           </AccordionPanel>
         </AccordionItem>
@@ -420,10 +239,7 @@ function App() {
         h="100%"
         zIndex="1"
       >
-        <div
-          id="sidebar"
-          style={{ width: "100%", height: "100%", overflowY: "auto" }}
-        ></div>
+        <div id="sidebar"/>
       </Box>
     </Flex>
   );
