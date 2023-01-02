@@ -75,7 +75,7 @@ function App() {
       travelMode: travelMode,
     });
     setDirectionsResponse(results);
-    const leg=results.routes[0].legs[0];
+    const leg = results.routes[0].legs[0];
     setDistance(leg.distance.text);
     setDuration(leg.duration.text);
   }
@@ -86,13 +86,23 @@ function App() {
     originRef.current.value = "";
     destiantionRef.current.value = "";
   }
-  const center=JSON.parse(process.env.REACT_APP_MAP_CENTER);
-  const mapOptions={
+
+  // function isTravelMode(mode){
+  //   if(travelMode===mode){
+  //     return true;
+  //   }else{
+  //     return false;
+  //   }
+  // } bu fonksyion karmaşıklığı önlemek amacıyla yazılmıştır ancak gereksiz olarak kabul edilmiştir
+
+  const center = JSON.parse(process.env.REACT_APP_MAP_CENTER);
+  const mapOptions = {
     zoomControl: false,
     streetViewControl: false,
     mapTypeControl: false,
     fullscreenControl: false,
   };
+
   return (
     <Flex position="relative" h="100vh" w="100vw">
       <Box position="absolute" right={0} top={0} h="100%" w="100%">
@@ -160,13 +170,17 @@ function App() {
           <IconButton
             icon={<FaBus />}
             isRound
-            bg={travelMode === google.maps.TravelMode.TRANSIT ? "blue.200" : null}
+            bg={
+              travelMode === google.maps.TravelMode.TRANSIT ? "blue.200" : null
+            }
             onClick={() => {
               setTravelMode(google.maps.TravelMode.TRANSIT);
             }}
           />
           <IconButton
-            bg={travelMode === google.maps.TravelMode.DRIVING ? "blue.200" : null}
+            bg={
+              travelMode === google.maps.TravelMode.DRIVING ? "blue.200" : null
+            }
             icon={<FaCar />}
             isRound
             onClick={() => {
@@ -176,7 +190,9 @@ function App() {
           <IconButton
             icon={<FaWalking />}
             isRound
-            bg={travelMode === google.maps.TravelMode.WALKING ? "blue.200" : null}
+            bg={
+              travelMode === google.maps.TravelMode.WALKING ? "blue.200" : null
+            }
             onClick={() => {
               setTravelMode(google.maps.TravelMode.WALKING);
             }}
@@ -222,9 +238,9 @@ function App() {
               h="28%"
               zIndex="1"
             >
-              <PoiListSection/>
-              <HistoryListSection/>
-              <HistoryListSection/>
+              <PoiListSection />
+              <HistoryListSection />
+              <HistoryListSection />
             </Box>
           </AccordionPanel>
         </AccordionItem>
@@ -237,9 +253,11 @@ function App() {
         shadow="base"
         w="15%"
         h="100%"
+        bg={"azure"}
+        overflowY={"auto"}
         zIndex="1"
       >
-        <div id="sidebar"/>
+        <div id="sidebar" />
       </Box>
     </Flex>
   );

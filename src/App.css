@@ -39,6 +39,7 @@
 
 #sidebar{
   width: "100%";
+  padding: 3px;
+  font-size: medium;
   height: "100%";
-  overflow-y:"auto"; 
 }

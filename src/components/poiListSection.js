@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Heading, List, ListItem, Select, Text } from "@chakra-ui/react";
 import { FaBuilding } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getPoi } from "../store/poiSlice";
 
 export default function PoiListSection() {
+
+  const dispatch=useDispatch();
+  const poi=useSelector(state=>state.poi.poi)
+
+  useEffect(() => {
+    dispatch(getPoi())
+  }, [JSON.stringify(poi)])
+  
+
   return (
     <Box
       id="poi-section"
@@ -27,7 +38,9 @@ export default function PoiListSection() {
       </Box>
       <Box px="15px" py="5px" overflowY="visible">
         <List>
-          <ListItem
+        {poi.map((item,index)=>{
+          return (
+            <ListItem key={index}
             shadow="dark-lg"
             display="flex"
             rounded="lg"
@@ -35,38 +48,10 @@ export default function PoiListSection() {
             my="3px"
           >
             <FaBuilding fontSize="20px" />
-            <Text mx="10px">Lorem ipsum dolor sit amet</Text>
+            <Text mx="10px">{item.title}</Text>
           </ListItem>
-          <ListItem
-            shadow="dark-lg"
-            display="flex"
-            rounded="lg"
-            p="5px"
-            my="3px"
-          >
-            <FaBuilding fontSize="20px" />
-            <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-          </ListItem>
-          <ListItem
-            shadow="dark-lg"
-            display="flex"
-            rounded="lg"
-            p="5px"
-            my="3px"
-          >
-            <FaBuilding fontSize="20px" />
-            <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-          </ListItem>
-          <ListItem
-            shadow="dark-lg"
-            display="flex"
-            rounded="lg"
-            p="5px"
-            my="3px"
-          >
-            <FaBuilding fontSize="20px" />
-            <Text mx="10px">Lorem ipsum dolor sit amet</Text>
-          </ListItem>
+          )
+        })}
         </List>
       </Box>
     </Box>
