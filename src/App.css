@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+#sidebar{
+  width: "100%";
+  padding: 3px;
+  font-size: medium;
+  height: "100%";
+}
