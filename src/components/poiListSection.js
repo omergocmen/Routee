@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Box, Heading, List, ListItem, Select, Text } from "@chakra-ui/react";
 import { FaBuilding } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getPoi } from "../store/poiSlice";
+import { getPoiByType } from "../store/poiSlice";
 
 export default function PoiListSection() {
 
@@ -10,7 +10,8 @@ export default function PoiListSection() {
   const poi=useSelector(state=>state.poi.poi)
 
   useEffect(() => {
-    dispatch(getPoi())
+    dispatch(getPoiByType("AVM"))
+    console.log(poi)
   }, [JSON.stringify(poi)])
   
 

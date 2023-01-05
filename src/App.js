@@ -39,25 +39,6 @@ import PoiListSection from "./components/poiListSection";
 import HistoryListSection from "./components/historyListSection";
 
 function App() {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyAJZoYbQOrF33cxskYA3gGvAOJ6N4_ifEo",
-    libraries: ["places", "visualization"],
-  });
-
-  const [map, setMap] = useState(/** @type google.maps.Map */ (null));
-  const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [distance, setDistance] = useState("");
-  const [duration, setDuration] = useState("");
-
-  /** @type React.MutableRefObject<HTMLInputElement> */
-  const originRef = useRef();
-  /** @type React.MutableRefObject<HTMLInputElement> */
-  const destiantionRef = useRef();
-
-=======
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [travelMode, setTravelMode] = useState();
   const [distance, setDistance] = useState("");
@@ -78,39 +59,19 @@ function App() {
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
     libraries: JSON.parse(process.env.REACT_APP_MAP_LIB),
   });
->>>>>>> main
   if (!isLoaded) {
     return <SkeletonText />;
   }
 
   async function calculateRoute() {
-<<<<<<< HEAD
-    if (originRef.current.value === "" || destiantionRef.current.value === "") {
-      return;
-    }
-    // eslint-disable-next-line no-undef
-=======
     setVisiblePanel("visible");
     if (originRef.current.value === "" || destiantionRef.current.value === "") {
       return;
     }
->>>>>>> main
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
       origin: originRef.current.value,
       destination: destiantionRef.current.value,
-<<<<<<< HEAD
-      // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode.DRIVING,
-    });
-    setDirectionsResponse(results);
-    setDistance(results.routes[0].legs[0].distance.text);
-    setDuration(results.routes[0].legs[0].duration.text);
-  }
-
-  function clearRoute() {
-    setDirectionsResponse(null);
-=======
       travelMode: travelMode,
     });
     setDirectionsResponse(results);
@@ -120,16 +81,12 @@ function App() {
   }
 
   function clearRoute() {
->>>>>>> main
     setDistance("");
     setDuration("");
     originRef.current.value = "";
     destiantionRef.current.value = "";
   }
 
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
   // function isTravelMode(mode){
   //   if(travelMode===mode){
   //     return true;
@@ -146,7 +103,6 @@ function App() {
     fullscreenControl: false,
   };
 
->>>>>>> main
   return (
     <Flex position="relative" h="100vh" w="100vw">
       <Box position="absolute" right={0} top={0} h="100%" w="100%">
