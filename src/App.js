@@ -14,6 +14,9 @@ import {
   Input,
   SkeletonText,
   Text,
+  Stack,
+  Divider,
+  Image,
   useToast,
 } from "@chakra-ui/react";
 
@@ -37,6 +40,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import PoiListSection from "./components/poiListSection";
 import HistoryListSection from "./components/historyListSection";
+import WeatherSection from "./components/weatherSection";
 
 function App() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -87,13 +91,6 @@ function App() {
     destiantionRef.current.value = "";
   }
 
-  // function isTravelMode(mode){
-  //   if(travelMode===mode){
-  //     return true;
-  //   }else{
-  //     return false;
-  //   }
-  // } bu fonksyion karmaşıklığı önlemek amacıyla yazılmıştır ancak gereksiz olarak kabul edilmiştir
 
   const center = JSON.parse(process.env.REACT_APP_MAP_CENTER);
   const mapOptions = {
@@ -105,6 +102,7 @@ function App() {
 
   return (
     <Flex position="relative" h="100vh" w="100vw">
+      <WeatherSection/>
       <Box position="absolute" right={0} top={0} h="100%" w="100%">
         <GoogleMap
           id="map"
