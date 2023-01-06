@@ -2,17 +2,21 @@ import React, { useEffect } from "react";
 import { Box, Heading, List, ListItem, Select, Text } from "@chakra-ui/react";
 import { FaBuilding } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getPoiByType } from "../store/poiSlice";
+import { getAllPoi} from "../store/poiSlice";
 
 export default function PoiListSection() {
 
   const dispatch=useDispatch();
   const poi=useSelector(state=>state.poi.poi)
+  
+  
 
   useEffect(() => {
-    dispatch(getPoiByType("AVM"))
-    console.log(poi)
+    dispatch(getAllPoi())
   }, [JSON.stringify(poi)])
+
+
+  
   
 
   return (
@@ -49,7 +53,7 @@ export default function PoiListSection() {
             my="3px"
           >
             <FaBuilding fontSize="20px" />
-            <Text mx="10px">{item.title}</Text>
+            <Text mx="10px">{item.name}</Text>
           </ListItem>
           )
         })}
