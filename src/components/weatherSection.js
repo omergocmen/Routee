@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Box, Stack, Image, Text } from "@chakra-ui/react";
 import { FaSun } from "react-icons/fa";
+import { useDispatch, useSelector} from "react-redux";
+import { getTodayWeather } from "../store/weatherSlice";
+
+
 
 export default function WeatherSection() {
+
+  const weather=useSelector(state=>state.weather.weather)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getTodayWeather())
+    console.log(weather)
+  }, [JSON.stringify(weather)])
   return (
     <Box
       id="weather-section"
