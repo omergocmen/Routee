@@ -14,17 +14,14 @@ import {
   Input,
   SkeletonText,
   Text,
-  Stack,
-  Divider,
-  Image,
   useToast,
 } from "@chakra-ui/react";
 
 import {
   FaBicycle,
-  FaBuilding,
   FaBus,
   FaCar,
+  FaSearchLocation,
   FaTimes,
   FaWalking,
 } from "react-icons/fa";
@@ -47,6 +44,7 @@ function App() {
   const [travelMode, setTravelMode] = useState();
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
+  const [startLocation, setStartLocation] = useState("");
   const [visiblePanel, setVisiblePanel] = useState("hidden");
 
   const sidebar = document.getElementById("sidebar");
@@ -67,21 +65,61 @@ function App() {
     return <SkeletonText />;
   }
 
-  async function calculateRoute() {
-    setVisiblePanel("visible");
+  function setLocation() {
+    originRef.current.value = "Konumunuz ◎";
+    navigator.geolocation.getCurrentPosition(function (position) {
+      setStartLocation(
+        position.coords.latitude.toString() +
+          ", " +
+          position.coords.longitude.toString()
+      );
+    });
+
+    toast({
+      title: "Bilgilendirme",
+      description: "Başlangıç Konumunuz Ayarlandı",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  }
+
+  function calculateRoute() {
     if (originRef.current.value === "" || destiantionRef.current.value === "") {
       return;
     }
+
+    if (originRef.current.value === "Konumunuz ◎" && startLocation !== "") {
+      showInMap(startLocation);
+    } else {
+      showInMap(originRef.current.value);
+    }
+  }
+
+  function showInMap(start) {
     const directionsService = new google.maps.DirectionsService();
-    const results = await directionsService.route({
-      origin: originRef.current.value,
-      destination: destiantionRef.current.value,
-      travelMode: travelMode,
-    });
-    setDirectionsResponse(results);
-    const leg = results.routes[0].legs[0];
-    setDistance(leg.distance.text);
-    setDuration(leg.duration.text);
+    directionsService
+      .route({
+        origin: start,
+        destination: destiantionRef.current.value,
+        travelMode: travelMode,
+      })
+      .then((results) => {
+        setDirectionsResponse(results);
+        const leg = results.routes[0].legs[0];
+        setDistance(leg.distance.text);
+        setDuration(leg.duration.text);
+        setVisiblePanel("visible");
+      })
+      .catch(() =>{
+        toast({
+          title: "Bilgilendirme",
+          description: "Böyle bir rota oluşturamadı. Lütfen başlangıç ve varış noktasını kontrol edin",
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+        });
+      });
   }
 
   function clearRoute() {
@@ -90,7 +128,6 @@ function App() {
     originRef.current.value = "";
     destiantionRef.current.value = "";
   }
-
 
   const center = JSON.parse(process.env.REACT_APP_MAP_CENTER);
   const mapOptions = {
@@ -102,7 +139,7 @@ function App() {
 
   return (
     <Flex position="relative" h="100vh" w="100vw">
-      <WeatherSection/>
+      <WeatherSection />
       <Box position="absolute" right={0} top={0} h="100%" w="100%">
         <GoogleMap
           id="map"
@@ -140,6 +177,12 @@ function App() {
               <Input type="text" placeholder="Origin" ref={originRef} />
             </Autocomplete>
           </Box>
+          <IconButton
+            aria-label="center back"
+            onClick={() => setLocation()}
+            title="Konumunu Başlangıç Konumunu Ayarla"
+            icon={<FaSearchLocation />}
+          />
           <Box flexGrow={1}>
             <Autocomplete>
               <Input
@@ -236,7 +279,7 @@ function App() {
               h="28%"
               zIndex="1"
             >
-              <PoiListSection />
+              <PoiListSection destinaton={destiantionRef} />
               <HistoryListSection />
               <HistoryListSection />
             </Box>

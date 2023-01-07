@@ -1,21 +1,31 @@
 import React, { useEffect } from "react";
-import { Box, Heading, List, ListItem, Select, Text } from "@chakra-ui/react";
+import { Box, Heading, List, ListItem, Select, Text, useToast } from "@chakra-ui/react";
 import { FaBuilding } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPoi} from "../store/poiSlice";
 
-export default function PoiListSection() {
+export default function PoiListSection(props) {
 
   const dispatch=useDispatch();
   const poi=useSelector(state=>state.poi.poi)
-  
-  
+  const toast=useToast();
 
   useEffect(() => {
     dispatch(getAllPoi())
   }, [JSON.stringify(poi)])
 
 
+  const setDestination=(poi)=>{
+      props.destinaton.current.value=poi.name;
+      toast({
+        title: "Bilgilendirme",
+        description: poi.name+" varış noktası olarak seçildi",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+  }
+  
   
   
 
@@ -49,6 +59,8 @@ export default function PoiListSection() {
             shadow="dark-lg"
             display="flex"
             rounded="lg"
+            onClick={()=>setDestination(item)}
+            wordBreak="break-all"
             p="5px"
             my="3px"
           >
