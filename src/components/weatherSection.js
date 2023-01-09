@@ -38,7 +38,7 @@ export default function WeatherSection() {
         />
         <Stack>
           <Text fontWeight="bold" color={"blue.600"}>
-            Sıcaklık {weather.tempCelsius+"°C "+weather.weatherType}
+            Hava Bugün {weather.tempCelsius+"°C "+weather.weatherType}
           </Text>
         </Stack>
       </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Heading, List, ListItem, Select, Text, useToast } from "@chakra-ui/react";
 import { FaBuilding } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,11 +9,49 @@ export default function PoiListSection(props) {
   const dispatch=useDispatch();
   const poi=useSelector(state=>state.poi.poi)
   const toast=useToast();
+  const [filteredPoiList, setFilteredPoiList] = useState([])
+
+  const options = [
+    {
+      key: "ALL",
+      label: "Tümü",
+    },
+    {
+      key: "MUSEUM",
+      label: "Müze",
+    },
+    {
+      key: "AVM",
+      label: "Avm",
+    },
+    {
+      key: "MOSQUE",
+      label: "Cami",
+    },
+    {
+      key: "PARK",
+      label: "Park",
+    }
+  ]
 
   useEffect(() => {
     dispatch(getAllPoi())
+    setFilteredPoiList(poi)
   }, [JSON.stringify(poi)])
 
+
+  const filterPoiList=(event)=>{
+    const item=event.target;
+    if(item.value=="ALL"){
+      setFilteredPoiList(poi)
+    }else{
+      const newFilteredList= poi.filter(
+        (i) => i.poiType === item.value
+      )
+      console.log(newFilteredList);
+      setFilteredPoiList(newFilteredList)
+    }
+  }
 
   const setDestination=(poi)=>{
       props.destinaton.current.value=poi.name;
@@ -27,8 +65,6 @@ export default function PoiListSection(props) {
   }
   
   
-  
-
   return (
     <Box
       id="poi-section"
@@ -45,15 +81,17 @@ export default function PoiListSection(props) {
         En Çok Ziyaret Edilenler
       </Heading>
       <Box px="15px">
-        <Select placeholder="Kategori Seçiniz">
-          <option value="option1">Müze</option>
-          <option value="option2">Sinema</option>
-          <option value="option3">Restoran</option>
+        <Select onChange={(event)=>filterPoiList(event)} >
+            {options && options.map((item,index)=>{
+              return(
+                <option key={index} value={item.key}>{item.label}</option>
+              )
+            })}
         </Select>
       </Box>
       <Box px="15px" py="5px" overflowY="visible">
         <List>
-        {poi.map((item,index)=>{
+        {filteredPoiList.map((item,index)=>{
           return (
             <ListItem key={index}
             shadow="dark-lg"

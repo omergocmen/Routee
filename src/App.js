@@ -59,7 +59,7 @@ function App() {
 
   useEffect(() => {
     const mode=queryString.parse(location.search).travelmode;
-    if(mode && mode!=""){
+    if(mode!=undefined && mode!=""){
       setTravelMode(mode);
     }
   }, []);
@@ -93,9 +93,15 @@ function App() {
 
   function calculateRoute() {
     if (originRef.current.value === "" || destiantionRef.current.value === "") {
+      toast({
+        title: "Bilgilendirme",
+        description: "Lütfen Başlangıç Ve Bitiş Konumunuzu Doğru Giriniz",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
       return;
     }
-    navigate("/?origin="+originRef.current.value+"&destination="+destiantionRef.current.value+"&travelmode="+travelMode);
     if (originRef.current.value === "Konumunuz ◎" && startLocation !== "") {
       showInMap(startLocation);
     } else {
@@ -104,18 +110,18 @@ function App() {
   }
   function mapLoaded(){
     const query=location.search;
-    if (query==="") {
-      return;
-    }
     const params=queryString.parse(query)
-    originRef.current.value=params.origin;
-    destiantionRef.current.value=params.destination;
-    setTravelMode(params.travelmode)
-    console.log(travelMode);
-    calculateRoute();
+    if(location.search!="" && params.origin && params.destination && params.travelmode)
+    {
+      originRef.current.value=params.origin;
+      destiantionRef.current.value=params.destination;
+      setTravelMode(params.travelmode)
+      calculateRoute();
+    }
   }
 
   function showInMap(start) {
+    navigate("/?origin="+start+"&destination="+destiantionRef.current.value+"&travelmode="+travelMode);
     const directionsService = new google.maps.DirectionsService();
     directionsService
       .route({
@@ -133,7 +139,7 @@ function App() {
       .catch(() =>{
         toast({
           title: "Bilgilendirme",
-          description: "Böyle bir rota oluşturamadı. Lütfen başlangıç ve varış noktasını kontrol edin",
+          description: "Böyle bir rota oluşturamadı. Lütfen başlangıç, varış ve taşıt tipi seçimlerine dikkat edin",
           status: "warning",
           duration: 3000,
           isClosable: true,
