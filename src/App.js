@@ -38,10 +38,13 @@ import { useEffect, useRef, useState } from "react";
 import PoiListSection from "./components/poiListSection";
 import HistoryListSection from "./components/historyListSection";
 import WeatherSection from "./components/weatherSection";
+import SettingsSection from "./components/settingsSection"; 
+import queryString from "query-string";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [travelMode, setTravelMode] = useState();
+  const [travelMode, setTravelMode] = useState("DRIVING");
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [startLocation, setStartLocation] = useState("");
@@ -52,9 +55,13 @@ function App() {
   const destiantionRef = useRef();
 
   const toast = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setTravelMode(google.maps.TravelMode.DRIVING);
+    const mode=queryString.parse(location.search).travelmode;
+    if(mode && mode!=""){
+      setTravelMode(mode);
+    }
   }, []);
 
   const { isLoaded } = useLoadScript({
@@ -88,12 +95,24 @@ function App() {
     if (originRef.current.value === "" || destiantionRef.current.value === "") {
       return;
     }
-
+    navigate("/?origin="+originRef.current.value+"&destination="+destiantionRef.current.value+"&travelmode="+travelMode);
     if (originRef.current.value === "Konumunuz ◎" && startLocation !== "") {
       showInMap(startLocation);
     } else {
       showInMap(originRef.current.value);
     }
+  }
+  function mapLoaded(){
+    const query=location.search;
+    if (query==="") {
+      return;
+    }
+    const params=queryString.parse(query)
+    originRef.current.value=params.origin;
+    destiantionRef.current.value=params.destination;
+    setTravelMode(params.travelmode)
+    console.log(travelMode);
+    calculateRoute();
   }
 
   function showInMap(start) {
@@ -144,6 +163,7 @@ function App() {
         <GoogleMap
           id="map"
           center={center}
+          onLoad={mapLoaded}
           zoom={15}
           mapContainerStyle={{ width: "100%", height: "100%" }}
           options={mapOptions}
@@ -281,7 +301,7 @@ function App() {
             >
               <PoiListSection destinaton={destiantionRef} />
               <HistoryListSection />
-              <HistoryListSection />
+              <SettingsSection />
             </Box>
           </AccordionPanel>
         </AccordionItem>
