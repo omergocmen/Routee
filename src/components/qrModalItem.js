@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import QRCode from "react-qr-code";
 import { FaQrcode } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 
 
@@ -23,13 +24,16 @@ export default function QrModalItem() {
 
     const initialRef = React.useRef(null)
     const finalRef = React.useRef(null)
+
+    const { t } = useTranslation();
+
   
   return (
     <Box>
       <Button onClick={()=>{
         setValue(location.href)
         onOpen()}} w="90%" margin="2">
-        <FaQrcode style={{marginRight:"3px"}}/>Qr Kod ile Paylaş
+        <FaQrcode style={{marginRight:"3px"}}/> {t('shareQr')}
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -39,7 +43,7 @@ export default function QrModalItem() {
       >
         <ModalOverlay />
         <ModalContent textAlign={"center"}>
-          <ModalHeader>QR Kod</ModalHeader>
+        <ModalHeader> {t('Qr')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
           <div style={{height: "auto",border:"2px dashed black" , margin: "0 auto", padding:"25px", paddingBottom:"0", maxWidth: 256, width: "100%" }}>
@@ -50,7 +54,7 @@ export default function QrModalItem() {
             viewBox={`0 0 256 256`}
             />
             <Text fontSize={"lg"} fontWeight="bold" my="4">Routee</Text>
-        </div>
+          </div>
           </ModalBody>
         </ModalContent>
       </Modal>

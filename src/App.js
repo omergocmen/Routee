@@ -41,6 +41,7 @@ import WeatherSection from "./components/weatherSection";
 import SettingsSection from "./components/settingsSection"; 
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function App() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -49,6 +50,8 @@ function App() {
   const [duration, setDuration] = useState("");
   const [startLocation, setStartLocation] = useState("");
   const [visiblePanel, setVisiblePanel] = useState("hidden");
+
+  const { t } = useTranslation();
 
   const sidebar = document.getElementById("sidebar");
   const originRef = useRef();
@@ -73,7 +76,7 @@ function App() {
   }
 
   function setLocation() {
-    originRef.current.value = "Konumunuz ◎";
+    originRef.current.value = "Konumunuz(Your Location) ◎";
     navigator.geolocation.getCurrentPosition(function (position) {
       setStartLocation(
         position.coords.latitude.toString() +
@@ -102,7 +105,7 @@ function App() {
       });
       return;
     }
-    if (originRef.current.value === "Konumunuz ◎" && startLocation !== "") {
+    if (originRef.current.value === "Konumunuz(Your Location) ◎" && startLocation !== "") {
       showInMap(startLocation);
     } else {
       showInMap(originRef.current.value);
@@ -200,27 +203,27 @@ function App() {
         <HStack spacing={2} justifyContent="space-between">
           <Box flexGrow={1}>
             <Autocomplete>
-              <Input type="text" placeholder="Origin" ref={originRef} />
+              <Input type="text" placeholder={t('origin')} ref={originRef} />
             </Autocomplete>
           </Box>
           <IconButton
             aria-label="center back"
             onClick={() => setLocation()}
-            title="Konumunu Başlangıç Konumunu Ayarla"
+            title={t('infoTitle')}
             icon={<FaSearchLocation />}
           />
           <Box flexGrow={1}>
             <Autocomplete>
               <Input
                 type="text"
-                placeholder="Destination"
+                placeholder={t('destination')}
                 ref={destiantionRef}
               />
             </Autocomplete>
           </Box>
           <ButtonGroup>
             <Button colorScheme="pink" type="submit" onClick={calculateRoute}>
-              Rotayı Hesapla
+            {t('calculateRoute')}
             </Button>
             <IconButton
               aria-label="center back"
@@ -230,8 +233,8 @@ function App() {
           </ButtonGroup>
         </HStack>
         <HStack spacing={4} mt={4} justifyContent="space-around">
-          <Text>Uzaklık: {distance} </Text>
-          <Text>Tahmini Süre: {duration} </Text>
+          <Text>{t('distance')}: {distance} </Text>
+          <Text>{t('duration')}: {duration} </Text>
         </HStack>
         <HStack spacing={4} mt={4} justifyContent="end">
           <IconButton
@@ -283,13 +286,14 @@ function App() {
         position="absolute"
         bottom="0"
         defaultIndex={[0]}
+        minW="1200px"
         allowMultiple
         w={visiblePanel === "visible" ? "85%" : "100%"}
       >
         <AccordionItem>
           <Heading>
             <AccordionButton bg="yellow.300" justifyContent="center">
-              <Box as="span">Popüler Varış Noktaları</Box>
+              <Box as="span">{t('popularDestinations')}</Box>
               <AccordionIcon />
             </AccordionButton>
           </Heading>

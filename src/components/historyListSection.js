@@ -1,13 +1,18 @@
 import React from "react";
 import { Box, Heading, List, ListItem, Select, Text } from "@chakra-ui/react";
 import { FaBuilding } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export default function HistoryListSection() {
+
+  const { t } = useTranslation();
+
   return (
     <Box
     id="history-section"
     w="30%"
     maxH="250px"
+    minW="200px"
     bg="HighlightText"
     minH="240px"
     overflowY="auto"
@@ -16,7 +21,7 @@ export default function HistoryListSection() {
     rounded="lg"
   >
     <Heading size="md" m="5px" textAlign="center">
-      Daha Önce Buradan Ziyaret Edilenler
+    {t('history')}
     </Heading>
     <Box px="15px" py="5px" overflowY="visible">
       <List>

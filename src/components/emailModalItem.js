@@ -18,15 +18,18 @@ import {
 import { sendMail } from "../store/emailSlice";
 import queryString from "query-string";
 import { FaMailBulk } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export default function EmailModalItem() {
+
+  const { t } = useTranslation();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
   const toast = useToast();
 
   function sendMailRoute() {
-    console.log("deneme");
     if (initialRef.current.value == "") {
       toast({
         title: "Bilgilendirme",
@@ -37,7 +40,6 @@ export default function EmailModalItem() {
       });
       return;
     }
-    console.log("deneme2");
 
     const param = queryString.parse(location.search);
 
@@ -80,7 +82,7 @@ export default function EmailModalItem() {
   return (
     <Box>
       <Button onClick={onOpen} w="90%" margin="2">
-        <FaMailBulk/>E-posta ile Paylaş
+        <FaMailBulk/>{t('shareEmail')}
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -90,11 +92,11 @@ export default function EmailModalItem() {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>E-Posta Adresini Gir</ModalHeader>
+          <ModalHeader>{t('logEmail')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>E-posta</FormLabel>
+              <FormLabel>{t('email')}</FormLabel>
               <Input
                 type="email"
                 ref={initialRef}
@@ -105,10 +107,10 @@ export default function EmailModalItem() {
 
           <ModalFooter>
             <Button colorScheme="blue" onClick={() => sendMailRoute()} mr={3}>
-              Paylaş
+            {t('share')}
             </Button>
             <Button bg="red.500" onClick={onClose}>
-              iptal
+            {t('cancel')}
             </Button>
           </ModalFooter>
         </ModalContent>

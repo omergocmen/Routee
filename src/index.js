@@ -7,6 +7,7 @@ import { ChakraProvider, theme } from "@chakra-ui/react";
 import App from "./App";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./i18n/i18n"
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

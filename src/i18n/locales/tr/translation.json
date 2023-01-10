@@ -1,0 +1,23 @@
+{
+  "calculateRoute": "Rotayı Hesapla",
+  "origin": "Başlangıç Noktası",
+  "destination":"Varış Noktası",
+  "distance":"Uzaklık",
+  "duration":"Tahmini Süre",
+  "min":"Dakika",
+  "hour":"Saat",
+  "month":"Ay",
+  "year":"Yıl",
+  "share":"Paylaş",
+  "shareEmail":"E-posta ile Paylaş",
+  "shareQr":"QR Kod ile Paylaş",
+  "poi":"En Çok İlgi Görenler",
+  "history":"Daha Önce Buradan Ziyaret Edilenler",
+  "popularDestinations":"Popüler Varış Noktaları",
+  "weather":"Bugün Hava",
+  "email":"E-posta",
+  "logEmail":"Lütfen E-posta Adresinizi Giriniz",
+  "cancel":"İptal",
+  "Qr":"QR Kod",
+  "infoTitle":"Konumunu Başlangıç Konumunu Ayarla"
+}

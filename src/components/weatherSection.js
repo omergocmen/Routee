@@ -3,8 +3,10 @@ import React, { useEffect } from "react";
 import { Box, Stack, Image, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector} from "react-redux";
 import { getTodayWeather } from "../store/weatherSlice";
+import { useTranslation } from "react-i18next";
 
 export default function WeatherSection() {
+  const { t } = useTranslation();
 
   const weather=useSelector(state=>state.weather.weather)
   const dispatch = useDispatch()
@@ -38,7 +40,7 @@ export default function WeatherSection() {
         />
         <Stack>
           <Text fontWeight="bold" color={"blue.600"}>
-            Hava Bugün {weather.tempCelsius+"°C "+weather.weatherType}
+          {t('weather')} {weather.tempCelsius+"°C "+weather.weatherType}
           </Text>
         </Stack>
       </Box>

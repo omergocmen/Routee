@@ -3,6 +3,7 @@ import { Box, Heading, List, ListItem, Select, Text, useToast } from "@chakra-ui
 import { FaBuilding } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPoi} from "../store/poiSlice";
+import { useTranslation } from "react-i18next";
 
 export default function PoiListSection(props) {
 
@@ -10,27 +11,28 @@ export default function PoiListSection(props) {
   const poi=useSelector(state=>state.poi.poi)
   const toast=useToast();
   const [filteredPoiList, setFilteredPoiList] = useState([])
+  const { t } = useTranslation();
 
   const options = [
     {
       key: "ALL",
-      label: "Tümü",
+      label: "Tümü (All Poi)",
     },
     {
       key: "MUSEUM",
-      label: "Müze",
+      label: "Müze (MUSEUM)",
     },
     {
       key: "AVM",
-      label: "Avm",
+      label: "Avm (AVM)",
     },
     {
       key: "MOSQUE",
-      label: "Cami",
+      label: "Cami (MOSQUE)",
     },
     {
       key: "PARK",
-      label: "Park",
+      label: "Park (PARK)",
     }
   ]
 
@@ -71,6 +73,7 @@ export default function PoiListSection(props) {
       w="30%"
       maxH="250px"
       minH="240px"
+      minW="200px"
       overflowY="auto"
       bg="HighlightText"
       h="full"
@@ -78,7 +81,7 @@ export default function PoiListSection(props) {
       rounded="lg"
     >
       <Heading size="md" m="5px" textAlign="center">
-        En Çok Ziyaret Edilenler
+      {t('poi')}
       </Heading>
       <Box px="15px">
         <Select onChange={(event)=>filterPoiList(event)} >

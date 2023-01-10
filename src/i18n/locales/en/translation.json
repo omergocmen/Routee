@@ -1,0 +1,23 @@
+{
+    "calculateRoute": "Calculate Route",
+    "origin": "Origin",
+    "destination":"Destination",
+    "distance":"Distance",
+    "duration":"Duration",
+    "min":"Min",
+    "hour":"Hour",
+    "month":"Month",
+    "year":"Year",
+    "share":"Share",
+    "shareEmail":"Share With Email",
+    "shareQr":"Share With QR",
+    "poi":"Point Of Interest",
+    "history":"Places Visited These Days From Here",
+    "popularDestinations":"Popular Destinations",
+    "weather":"Today's Weather",
+    "email":"Email",
+    "logEmail":"Please Enter Your Email",
+    "cancel":"Cancel",
+    "Qr":"QR Code",
+    "infoTitle":"Set Position As Your Origin"
+  }
