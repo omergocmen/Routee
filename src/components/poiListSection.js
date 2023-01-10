@@ -50,7 +50,6 @@ export default function PoiListSection(props) {
       const newFilteredList= poi.filter(
         (i) => i.poiType === item.value
       )
-      console.log(newFilteredList);
       setFilteredPoiList(newFilteredList)
     }
   }

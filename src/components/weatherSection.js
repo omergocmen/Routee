@@ -10,10 +10,10 @@ export default function WeatherSection() {
 
   const weather=useSelector(state=>state.weather.weather)
   const dispatch = useDispatch()
-  const params={latitude:40.9184, longitude:29.2205,language:"TURKISH"}
+  const params={latitude:40.9184, longitude:29.2205,language:t("weatherLanguage")}
   useEffect(() => {
     dispatch(getTodayWeather({params}))
-  }, [JSON.stringify(weather)])
+  }, [JSON.stringify(weather),JSON.stringify(params)])
   return (
     <Box
       id="weather-section"

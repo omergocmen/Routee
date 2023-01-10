@@ -1,27 +1,32 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import baseAxios from "../helpers/baseAxios";
 
+export const saveDeviceHistory = createAsyncThunk("/history/device", async (request) => {
+  return baseAxios.post("/history/device",request.body,{params:request.params}).then((response) => {
+    return {name:request.body.endName};
+  });
+});
 
-export const getDevice = createAsyncThunk("history/device", async () => {
-  return baseAxios.get("/history/device").then((response) => {
+export const getDeviceHistory = createAsyncThunk("/history/all", async (params) => {
+  return baseAxios.get("/history/all",{params}).then((response) => {
     return response.data.data;
   });
 });
 
 
 const deviceHistorySlice = createSlice({
-  name: "device",
+  name: "deviceHistory",
   initialState: {
-    device: [],
+    deviceHistory: [],
   },
   extraReducers: {
-    
-    [getDevice.fulfilled]: (state, action) => {
-      state.device = action.payload;
+    [getDeviceHistory.fulfilled]: (state, action) => {
+      state.deviceHistory = action.payload;
     },
-    
-
-  },
+    [saveDeviceHistory.fulfilled]: (state, action) => {
+      state.deviceHistory = [...state.deviceHistory,action.payload];
+    }
+  }
 });
 
 export default deviceHistorySlice.reducer;

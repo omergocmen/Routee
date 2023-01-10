@@ -1,4 +1,5 @@
 {
+  "selectedLanguage":"tr",
   "calculateRoute": "Rotayı Hesapla",
   "origin": "Başlangıç Noktası",
   "destination":"Varış Noktası",
@@ -19,5 +20,6 @@
   "logEmail":"Lütfen E-posta Adresinizi Giriniz",
   "cancel":"İptal",
   "Qr":"QR Kod",
-  "infoTitle":"Konumunu Başlangıç Konumunu Ayarla"
+  "infoTitle":"Konumunu Başlangıç Konumunu Ayarla",
+  "weatherLanguage":"TURKISH"
 }

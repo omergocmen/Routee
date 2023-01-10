@@ -38,10 +38,13 @@ import { useEffect, useRef, useState } from "react";
 import PoiListSection from "./components/poiListSection";
 import HistoryListSection from "./components/historyListSection";
 import WeatherSection from "./components/weatherSection";
-import SettingsSection from "./components/settingsSection"; 
+import SettingsSection from "./components/settingsSection";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { register } from "./store/deviceSlice";
+import { saveDeviceHistory } from "./store/deviceHistorySlice";
 
 function App() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -56,13 +59,13 @@ function App() {
   const sidebar = document.getElementById("sidebar");
   const originRef = useRef();
   const destiantionRef = useRef();
-
   const toast = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const mode=queryString.parse(location.search).travelmode;
-    if(mode!=undefined && mode!=""){
+    const mode = queryString.parse(location.search).travelmode;
+    if (mode != undefined && mode != "") {
       setTravelMode(mode);
     }
   }, []);
@@ -73,6 +76,40 @@ function App() {
   });
   if (!isLoaded) {
     return <SkeletonText />;
+  }
+
+  function saveHistory(startName, endName) {
+    if (!localStorage.getItem("deviceKey")) {
+      register().then((response) => {
+        localStorage.setItem("deviceKey", response.data.data.deviceKey);
+        const request = {
+          body: {
+            startName,
+            endName,
+            startLon: "",
+            endLon: "",
+            startLat: "",
+            startLon: "",
+          },
+          params: { deviceKey: response.data.data.deviceKey },
+        };
+        dispatch(saveDeviceHistory(request));
+      });
+    } else {
+      const deviceKey = localStorage.getItem("deviceKey");
+      const request = {
+        body: {
+          startName,
+          endName,
+          startLon: "",
+          endLon: "",
+          startLat: "",
+          startLon: "",
+        },
+        params: { deviceKey: deviceKey },
+      };
+      dispatch(saveDeviceHistory(request));
+    }
   }
 
   function setLocation() {
@@ -105,30 +142,45 @@ function App() {
       });
       return;
     }
-    if (originRef.current.value === "Konumunuz(Your Location) ◎" && startLocation !== "") {
+    if (
+      originRef.current.value === "Konumunuz(Your Location) ◎" &&
+      startLocation !== ""
+    ) {
       showInMap(startLocation);
     } else {
       showInMap(originRef.current.value);
     }
   }
-  function mapLoaded(){
-    const query=location.search;
-    const params=queryString.parse(query)
-    if(location.search!="" && params.origin && params.destination && params.travelmode)
-    {
-      originRef.current.value=params.origin;
-      destiantionRef.current.value=params.destination;
-      setTravelMode(params.travelmode)
+  function mapLoaded() {
+    const query = location.search;
+    const params = queryString.parse(query);
+    if (
+      location.search != "" &&
+      params.origin &&
+      params.destination &&
+      params.travelmode
+    ) {
+      originRef.current.value = params.origin;
+      destiantionRef.current.value = params.destination;
+      setTravelMode(params.travelmode);
       calculateRoute();
     }
   }
 
   function showInMap(start) {
-    navigate("/?origin="+start+"&destination="+destiantionRef.current.value+"&travelmode="+travelMode);
+    navigate(
+      "/?origin=" +
+        start +
+        "&destination=" +
+        destiantionRef.current.value +
+        "&travelmode=" +
+        travelMode
+    );
     const directionsService = new google.maps.DirectionsService();
     directionsService
       .route({
         origin: start,
+        language: t("selectedLanguage"),
         destination: destiantionRef.current.value,
         travelMode: travelMode,
       })
@@ -138,11 +190,13 @@ function App() {
         setDistance(leg.distance.text);
         setDuration(leg.duration.text);
         setVisiblePanel("visible");
+        saveHistory(start, destiantionRef.current.value);
       })
-      .catch(() =>{
+      .catch(() => {
         toast({
           title: "Bilgilendirme",
-          description: "Böyle bir rota oluşturamadı. Lütfen başlangıç, varış ve taşıt tipi seçimlerine dikkat edin",
+          description:
+            "Böyle bir rota oluşturamadı. Lütfen başlangıç, varış ve taşıt tipi seçimlerine dikkat edin",
           status: "warning",
           duration: 3000,
           isClosable: true,
@@ -203,27 +257,27 @@ function App() {
         <HStack spacing={2} justifyContent="space-between">
           <Box flexGrow={1}>
             <Autocomplete>
-              <Input type="text" placeholder={t('origin')} ref={originRef} />
+              <Input type="text" placeholder={t("origin")} ref={originRef} />
             </Autocomplete>
           </Box>
           <IconButton
             aria-label="center back"
             onClick={() => setLocation()}
-            title={t('infoTitle')}
+            title={t("infoTitle")}
             icon={<FaSearchLocation />}
           />
           <Box flexGrow={1}>
             <Autocomplete>
               <Input
                 type="text"
-                placeholder={t('destination')}
+                placeholder={t("destination")}
                 ref={destiantionRef}
               />
             </Autocomplete>
           </Box>
           <ButtonGroup>
             <Button colorScheme="pink" type="submit" onClick={calculateRoute}>
-            {t('calculateRoute')}
+              {t("calculateRoute")}
             </Button>
             <IconButton
               aria-label="center back"
@@ -233,8 +287,12 @@ function App() {
           </ButtonGroup>
         </HStack>
         <HStack spacing={4} mt={4} justifyContent="space-around">
-          <Text>{t('distance')}: {distance} </Text>
-          <Text>{t('duration')}: {duration} </Text>
+          <Text>
+            {t("distance")}: {distance}{" "}
+          </Text>
+          <Text>
+            {t("duration")}: {duration}{" "}
+          </Text>
         </HStack>
         <HStack spacing={4} mt={4} justifyContent="end">
           <IconButton
@@ -293,7 +351,7 @@ function App() {
         <AccordionItem>
           <Heading>
             <AccordionButton bg="yellow.300" justifyContent="center">
-              <Box as="span">{t('popularDestinations')}</Box>
+              <Box as="span">{t("popularDestinations")}</Box>
               <AccordionIcon />
             </AccordionButton>
           </Heading>
@@ -310,7 +368,7 @@ function App() {
               zIndex="1"
             >
               <PoiListSection destinaton={destiantionRef} />
-              <HistoryListSection />
+              <HistoryListSection destinaton={destiantionRef} />
               <SettingsSection />
             </Box>
           </AccordionPanel>

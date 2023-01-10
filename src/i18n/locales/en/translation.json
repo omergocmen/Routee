@@ -1,4 +1,5 @@
-{
+{    
+    "selectedLanguage":"en",
     "calculateRoute": "Calculate Route",
     "origin": "Origin",
     "destination":"Destination",
@@ -19,5 +20,6 @@
     "logEmail":"Please Enter Your Email",
     "cancel":"Cancel",
     "Qr":"QR Code",
-    "infoTitle":"Set Position As Your Origin"
+    "infoTitle":"Set Position As Your Origin",
+    "weatherLanguage":"ENGLISH"
   }

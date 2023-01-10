@@ -1,14 +1,16 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import poi from "./poiSlice";
 import weather from './weatherSlice';
-import device from "./deviceHistorySlice";
+import deviceHistory from "./deviceHistorySlice";
 import email from "./emailSlice";
+import device from "./deviceSlice"
 
 const combinedReducers = combineReducers({
     poi,
     weather,
     device,
-    email
+    email,
+    deviceHistory
 });
 
 const store = configureStore({
