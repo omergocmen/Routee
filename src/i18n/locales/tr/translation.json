@@ -21,5 +21,12 @@
   "cancel":"İptal",
   "Qr":"QR Kod",
   "infoTitle":"Konumunu Başlangıç Konumunu Ayarla",
-  "weatherLanguage":"TURKISH"
+  "weatherLanguage":"TURKISH",
+  "info":"Bilgilendirme",
+  "emailRequired":"Lütfen Mail Adresinizi Giriniz",
+  "mailSentSuccess":"Mail Başarıyla İletildi",
+  "mailSentFail":"Mail İletilemedi",
+  "routeNotDrawn":"Henüz Rota Çizilmemiş",
+  "chosenAsDestination":" varış noktası olarak seçildi"
+  
 }

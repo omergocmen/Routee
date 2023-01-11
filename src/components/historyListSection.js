@@ -20,8 +20,8 @@ export default function HistoryListSection(props) {
   const setDestination=(historyItem)=>{
     props.destinaton.current.value=historyItem.name;
     toast({
-      title: "Bilgilendirme",
-      description: poi.name+" varış noktası olarak seçildi",
+      title: t('info'),
+      description: poi.name+ t('chosenAsDestination'),
       status: "success",
       duration: 2000,
       isClosable: true,

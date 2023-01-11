@@ -21,5 +21,12 @@
     "cancel":"Cancel",
     "Qr":"QR Code",
     "infoTitle":"Set Position As Your Origin",
-    "weatherLanguage":"ENGLISH"
+    "weatherLanguage":"ENGLISH",
+    "info":"Information",
+    "emailRequired":"Please Enter Your E-mail",
+    "mailSentSuccess":"Mail Sent Successfully",
+    "mailSentFail":"Mail Could Not Be Delivered",
+    "routeNotDrawn":"Route Not Drawn Yet",
+    "chosenAsDestination":" selected as destination"
+    
   }

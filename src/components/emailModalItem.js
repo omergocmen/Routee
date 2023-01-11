@@ -32,8 +32,8 @@ export default function EmailModalItem() {
   function sendMailRoute() {
     if (initialRef.current.value == "") {
       toast({
-        title: "Bilgilendirme",
-        description: "Lütfen Mail Adresinizi Giriniz",
+        title: t('info'),
+        description: t('emailRequired'),
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -52,8 +52,8 @@ export default function EmailModalItem() {
       })
         .then((response) => {
           toast({
-            title: "Bilgilendirme",
-            description: "Mail Başarıyla İletildi",
+            title: t('info'),
+            description: t('mailSentSuccess'),
             status: "success",
             duration: 2000,
             isClosable: true,
@@ -61,8 +61,8 @@ export default function EmailModalItem() {
         })
         .catch((err) => {
           toast({
-            title: "Bilgilendirme",
-            description: "Mail İletilemedi",
+            title: t('info'),
+            description: t('mailSentFail'),
             status: "error",
             duration: 2000,
             isClosable: true,
@@ -70,8 +70,8 @@ export default function EmailModalItem() {
         });
     } else {
       toast({
-        title: "Bilgilendirme",
-        description: "Henüz Rota Çizilmemiş",
+        title: t('info'),
+        description: t('routeNotDrawn'),
         status: "error",
         duration: 2000,
         isClosable: true,
