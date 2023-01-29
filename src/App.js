@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  FormLabel,
   Button,
   ButtonGroup,
   Flex,
@@ -12,6 +13,7 @@ import {
   HStack,
   IconButton,
   Input,
+  Switch,
   SkeletonText,
   Text,
   useToast,
@@ -30,6 +32,8 @@ import {
   GoogleMap,
   Marker,
   Autocomplete,
+  TrafficLayer,
+  TransitLayer,
   DirectionsRenderer,
   useLoadScript,
 } from "@react-google-maps/api";
@@ -53,6 +57,8 @@ function App() {
   const [duration, setDuration] = useState("");
   const [startLocation, setStartLocation] = useState("");
   const [visiblePanel, setVisiblePanel] = useState("hidden");
+  const [transitLayer,setTransitLayer] = useState(false);
+  const [trafficLayer,setTrafficLayer] = useState(false);
 
   const { t } = useTranslation();
 
@@ -69,6 +75,7 @@ function App() {
       setTravelMode(mode);
     }
   }, []);
+
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
@@ -142,10 +149,7 @@ function App() {
       });
       return;
     }
-    if (
-      originRef.current.value === "Konumunuz(Your Location) ◎" &&
-      startLocation !== ""
-    ) {
+    if (originRef.current.value === "Konumunuz(Your Location) ◎" && startLocation !== "") {
       showInMap(startLocation);
     } else {
       showInMap(originRef.current.value);
@@ -183,6 +187,7 @@ function App() {
         language: t("selectedLanguage"),
         destination: destiantionRef.current.value,
         travelMode: travelMode,
+        provideRouteAlternatives:true,
       })
       .then((results) => {
         setDirectionsResponse(results);
@@ -205,12 +210,15 @@ function App() {
   }
 
   function clearRoute() {
-    setDistance("");
-    setDuration("");
-    originRef.current.value = "";
-    destiantionRef.current.value = "";
+    window.location.replace("http://localhost:3000/")
   }
 
+  function onChangeTraffic(e){
+    setTrafficLayer(e.target.checked)
+  }
+  function onChangeTransit(e){
+    setTransitLayer(e.target.checked)
+  }
   const center = JSON.parse(process.env.REACT_APP_MAP_CENTER);
   const mapOptions = {
     zoomControl: false,
@@ -220,20 +228,27 @@ function App() {
   };
 
   return (
-    <Flex position="relative" h="100vh" w="100vw">
+    <Flex position="relative" h="100vh" minH={"800px"} w="100vw">
       <WeatherSection />
-      <Box position="absolute" right={0} top={0} h="100%" w="100%">
+      <Box position="absolute" right={0} top={0} h="100vh" w="100vw">
         <GoogleMap
           id="map"
           center={center}
           onLoad={mapLoaded}
           zoom={15}
-          mapContainerStyle={{ width: "100%", height: "100%" }}
+          mapContainerStyle={{
+            minWidth: "1200px",
+            minHeight:"800px",
+            width: "100%",
+            height: "100%",
+          }}
           options={mapOptions}
         >
-          {/* <TransitLayer /> */}
+          {transitLayer?<TransitLayer />:null}
           <Marker position={center} />
-          {/* <TrafficLayer position={center} /> */}
+          {trafficLayer?<TrafficLayer options={()=>{
+
+          }} position={center} />:null}
           {directionsResponse && (
             <DirectionsRenderer
               panel={sidebar}
@@ -245,7 +260,6 @@ function App() {
       <Box
         p={4}
         borderRadius="lg"
-        m={4}
         marginX="auto"
         minH="170px"
         maxH="18%"
@@ -294,57 +308,75 @@ function App() {
             {t("duration")}: {duration}{" "}
           </Text>
         </HStack>
-        <HStack spacing={4} mt={4} justifyContent="end">
-          <IconButton
-            icon={<FaBus />}
-            isRound
-            bg={
-              travelMode === google.maps.TravelMode.TRANSIT ? "blue.200" : null
-            }
-            onClick={() => {
-              setTravelMode(google.maps.TravelMode.TRANSIT);
-            }}
-          />
-          <IconButton
-            bg={
-              travelMode === google.maps.TravelMode.DRIVING ? "blue.200" : null
-            }
-            icon={<FaCar />}
-            isRound
-            onClick={() => {
-              setTravelMode(google.maps.TravelMode.DRIVING);
-            }}
-          />
-          <IconButton
-            icon={<FaWalking />}
-            isRound
-            bg={
-              travelMode === google.maps.TravelMode.WALKING ? "blue.200" : null
-            }
-            onClick={() => {
-              setTravelMode(google.maps.TravelMode.WALKING);
-            }}
-          />
-          <IconButton
-            icon={<FaBicycle />}
-            isRound
-            onClick={() => {
-              toast({
-                title: "Bilgilendirme",
-                description: "Bu araç tipi şuan kullanılamıyor",
-                status: "info",
-                duration: 2000,
-                isClosable: true,
-              });
-            }}
-          />
+        <HStack justifyContent="between" mt={4}>
+          <HStack w="50%" spacing={4} gap="4">
+            <IconButton
+              icon={<FaBus />}
+              isRound
+              bg={
+                travelMode === google.maps.TravelMode.TRANSIT
+                  ? "blue.200"
+                  : null
+              }
+              onClick={() => {
+                setTravelMode(google.maps.TravelMode.TRANSIT);
+              }}
+            />
+            <IconButton
+              bg={
+                travelMode === google.maps.TravelMode.DRIVING
+                  ? "blue.200"
+                  : null
+              }
+              icon={<FaCar />}
+              isRound
+              onClick={() => {
+                setTravelMode(google.maps.TravelMode.DRIVING);
+              }}
+            />
+            <IconButton
+              icon={<FaWalking />}
+              isRound
+              bg={
+                travelMode === google.maps.TravelMode.WALKING
+                  ? "blue.200"
+                  : null
+              }
+              onClick={() => {
+                setTravelMode(google.maps.TravelMode.WALKING);
+              }}
+            />
+            <IconButton
+              icon={<FaBicycle />}
+              isRound
+              onClick={() => {
+                toast({
+                  title: "Bilgilendirme",
+                  description: "Bu araç tipi şuan kullanılamıyor",
+                  status: "info",
+                  duration: 2000,
+                  isClosable: true,
+                });
+              }}
+            />
+          </HStack>
+          <HStack w="50%" justifyContent="end" spacing={6}>
+            <Box display="flex">
+              <FormLabel mb='0' htmlFor="isInvalid">Trafik</FormLabel>
+              <Switch onChange={(e)=>onChangeTraffic(e)} colorScheme="green"/>
+            </Box>
+            <Box display="flex">
+              <FormLabel mb='0' htmlFor="isInvalid">Toplu Taşıma</FormLabel>
+              <Switch onChange={(e)=>onChangeTransit(e)} colorScheme="green" />
+            </Box>
+          </HStack>
         </HStack>
       </Box>
       <Accordion
         position="absolute"
         bottom="0"
         defaultIndex={[0]}
-        minW="1200px"
+        minW="800px"
         allowMultiple
         w={visiblePanel === "visible" ? "85%" : "100%"}
       >
@@ -381,12 +413,14 @@ function App() {
         bgColor="white"
         shadow="base"
         w="15%"
+        ml="5"
+        minW="250px"
         h="100%"
         bg={"azure"}
         overflowY={"auto"}
         zIndex="1"
       >
-        <div id="sidebar" />
+        <div id="sidebar"/>
       </Box>
     </Flex>
   );

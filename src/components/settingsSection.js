@@ -22,7 +22,7 @@ export default function SettingsSection() {
       id="history-section"
       w="15%"
       maxH="250px"
-      bg="HighlightText"
+      bg="white"
       minW="250px"
       minH="240px"
       overflowY="auto"

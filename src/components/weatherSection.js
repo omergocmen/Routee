@@ -10,7 +10,7 @@ export default function WeatherSection() {
 
   const weather=useSelector(state=>state.weather.weather)
   const dispatch = useDispatch()
-  const params={latitude:40.9184, longitude:29.2205,language:t("weatherLanguage")}
+  const params={latitude:40.9184, longitude:29.2205,language:t("Language")}
   useEffect(() => {
     dispatch(getTodayWeather({params}))
   }, [JSON.stringify(weather),JSON.stringify(params)])
@@ -20,7 +20,7 @@ export default function WeatherSection() {
       w="8%"
       mt="4"
       bg="transparent"
-      ml="5"
+      mx="5"
       maxH="150px"
       minW="120px"
       fontSize="xl"

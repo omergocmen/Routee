@@ -12,6 +12,12 @@ export const getAllPoi = createAsyncThunk("poi/all", async () => {
   });
 });
 
+export const getAllPoiByDistance = createAsyncThunk("poi/distance-filter", async (data) => {
+  return baseAxios.get("/poi/distance-filter?latitude="+data.lat+"&longitude="+data.lon).then((response) => {
+    return response.data.data;
+  });
+});
+
 
 
 const poiSlice = createSlice({
@@ -26,8 +32,9 @@ const poiSlice = createSlice({
     [getAllPoi.fulfilled]: (state, action) => {
       state.poi = action.payload;
     },
-    
-
+    [getAllPoiByDistance.fulfilled]: (state, action) => {
+      state.poi = action.payload;
+    }
   },
 });
 

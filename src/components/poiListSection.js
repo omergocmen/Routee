@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, Heading, List, ListItem, Select, Text, useToast } from "@chakra-ui/react";
-import { FaBuilding } from "react-icons/fa";
+import { Box, Heading, IconButton, List, ListItem, Select, Text, useToast } from "@chakra-ui/react";
+import { FaShoppingBasket,FaSeedling,FaMosque,FaLandmark,FaClock } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPoi} from "../store/poiSlice";
+import { getAllPoi, getAllPoiByDistance} from "../store/poiSlice";
 import { useTranslation } from "react-i18next";
 
 export default function PoiListSection(props) {
@@ -38,6 +38,9 @@ export default function PoiListSection(props) {
 
   useEffect(() => {
     dispatch(getAllPoi())
+  }, [])
+  
+  useEffect(() => {
     setFilteredPoiList(poi)
   }, [JSON.stringify(poi)])
 
@@ -64,7 +67,41 @@ export default function PoiListSection(props) {
         isClosable: true,
       });
   }
-  
+  function getIcon(item){
+    if(item.poiType=="MUSEUM"){
+      return(
+        <FaLandmark fontSize="20px" />
+      )
+    }else if(item.poiType=="AVM"){
+      return(
+        <FaShoppingBasket fontSize="20px" />
+      )
+    }else if (item.poiType=="MOSQUE"){
+      return(
+        <FaMosque fontSize="20px" />
+      )
+    }else{
+      return (
+        <FaSeedling fontSize="20px" />
+      )
+    }
+    
+  }
+
+  function getItemByDistance(){
+    navigator.geolocation.getCurrentPosition(function (position) {
+      const lat=position.coords.latitude.toString()
+      const lon=position.coords.longitude.toString()
+      dispatch(getAllPoiByDistance({lat:lat,lon:lon}))
+      toast({
+        title: "Bilgilendirme",
+        description:"En Çok İlgili Görenler Yakınlığa Göre Listelendi",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    });
+  }
   
   return (
     <Box
@@ -74,7 +111,7 @@ export default function PoiListSection(props) {
       minH="240px"
       minW="200px"
       overflowY="auto"
-      bg="HighlightText"
+      bg="white"
       h="full"
       shadow="dark-lg"
       rounded="lg"
@@ -83,29 +120,35 @@ export default function PoiListSection(props) {
       {t('poi')}
       </Heading>
       <Box px="15px">
-        <Select onChange={(event)=>filterPoiList(event)} >
+        <Select float="left" mx="2" w={"70%"} onChange={(event)=>filterPoiList(event)} >
             {options && options.map((item,index)=>{
               return(
                 <option key={index} value={item.key}>{item.label}</option>
               )
             })}
         </Select>
+        <IconButton w={"20%"}
+          fontSize='20px'
+          icon={<FaClock />}
+          onClick={()=>getItemByDistance()}
+          title="Mesafe Bazlı Sıralama"
+        />
       </Box>
       <Box px="15px" py="5px" overflowY="visible">
         <List>
         {filteredPoiList.map((item,index)=>{
           return (
             <ListItem key={index}
-            shadow="dark-lg"
             display="flex"
+            borderBottom={"1px"}
             rounded="lg"
             onClick={()=>setDestination(item)}
             wordBreak="break-all"
             p="5px"
             my="3px"
           >
-            <FaBuilding fontSize="20px" />
-            <Text mx="10px">{item.name}</Text>
+            {getIcon(item)}
+            <Text mx="10px">{item.name+" ("+(item.description)+")"}</Text>
           </ListItem>
           )
         })}

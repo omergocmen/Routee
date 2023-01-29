@@ -12,6 +12,7 @@ import {
   useDisclosure,
   FormControl,
   FormLabel,
+  FormHelperText,
   Input,
   useToast,
 } from "@chakra-ui/react";
@@ -30,15 +31,19 @@ export default function EmailModalItem() {
   const toast = useToast();
 
   function sendMailRoute() {
-    if (initialRef.current.value == "") {
-      toast({
-        title: "Bilgilendirme",
-        description: "Lütfen Mail Adresinizi Giriniz",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
+
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+      console.log(regex.test(initialRef.current.value));
+
+      if (initialRef.current.value == "" || !regex.test(initialRef.current.value)) {
+        toast({
+          title: "Bilgilendirme",
+          description: "Lütfen Geçerli Bir Mail Adresi Giriniz",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
     }
 
     const param = queryString.parse(location.search);
@@ -49,7 +54,7 @@ export default function EmailModalItem() {
         startLocationName: param?.origin,
         endLocationName: param?.destination,
         routeDetail: location.href,
-      })
+      },t('Language'))
         .then((response) => {
           toast({
             title: "Bilgilendirme",
