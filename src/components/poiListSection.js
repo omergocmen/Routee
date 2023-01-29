@@ -60,8 +60,8 @@ export default function PoiListSection(props) {
   const setDestination=(poi)=>{
       props.destinaton.current.value=poi.name;
       toast({
-        title: "Bilgilendirme",
-        description: poi.name+" varış noktası olarak seçildi",
+        title: t('info'),
+        description: poi.name+ t('chosenAsDestination'),
         status: "success",
         duration: 2000,
         isClosable: true,

@@ -31,19 +31,18 @@ export default function EmailModalItem() {
   const toast = useToast();
 
   function sendMailRoute() {
-
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
       console.log(regex.test(initialRef.current.value));
 
-      if (initialRef.current.value == "" || !regex.test(initialRef.current.value)) {
-        toast({
-          title: "Bilgilendirme",
-          description: "Lütfen Geçerli Bir Mail Adresi Giriniz",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
-        return;
+    if (initialRef.current.value == "") {
+      toast({
+        title: t('info'),
+        description: t('emailRequired'),
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
     }
 
     const param = queryString.parse(location.search);
@@ -57,8 +56,8 @@ export default function EmailModalItem() {
       },t('Language'))
         .then((response) => {
           toast({
-            title: "Bilgilendirme",
-            description: "Mail Başarıyla İletildi",
+            title: t('info'),
+            description: t('mailSentSuccess'),
             status: "success",
             duration: 2000,
             isClosable: true,
@@ -66,8 +65,8 @@ export default function EmailModalItem() {
         })
         .catch((err) => {
           toast({
-            title: "Bilgilendirme",
-            description: "Mail İletilemedi",
+            title: t('info'),
+            description: t('mailSentFail'),
             status: "error",
             duration: 2000,
             isClosable: true,
@@ -75,8 +74,8 @@ export default function EmailModalItem() {
         });
     } else {
       toast({
-        title: "Bilgilendirme",
-        description: "Henüz Rota Çizilmemiş",
+        title: t('info'),
+        description: t('routeNotDrawn'),
         status: "error",
         duration: 2000,
         isClosable: true,
