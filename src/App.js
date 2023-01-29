@@ -130,8 +130,8 @@ function App() {
     });
 
     toast({
-      title: "Bilgilendirme",
-      description: "Başlangıç Konumunuz Ayarlandı",
+      title: t('info'),
+      description: t('originSet'),
       status: "success",
       duration: 2000,
       isClosable: true,
@@ -141,8 +141,8 @@ function App() {
   function calculateRoute() {
     if (originRef.current.value === "" || destiantionRef.current.value === "") {
       toast({
-        title: "Bilgilendirme",
-        description: "Lütfen Başlangıç Ve Bitiş Konumunuzu Doğru Giriniz",
+        title: t('info'),
+        description: t('validDestReq'),
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -199,9 +199,9 @@ function App() {
       })
       .catch(() => {
         toast({
-          title: "Bilgilendirme",
+          title: t('info'),
           description:
-            "Böyle bir rota oluşturamadı. Lütfen başlangıç, varış ve taşıt tipi seçimlerine dikkat edin",
+          t('routeCouldNotCreated'),
           status: "warning",
           duration: 3000,
           isClosable: true,
@@ -351,8 +351,8 @@ function App() {
               isRound
               onClick={() => {
                 toast({
-                  title: "Bilgilendirme",
-                  description: "Bu araç tipi şuan kullanılamıyor",
+                  title: t('info'),
+                  description: t('vehicleTypeNot'),
                   status: "info",
                   duration: 2000,
                   isClosable: true,
@@ -362,11 +362,11 @@ function App() {
           </HStack>
           <HStack w="50%" justifyContent="end" spacing={6}>
             <Box display="flex">
-              <FormLabel mb='0' htmlFor="isInvalid">Trafik</FormLabel>
+              <FormLabel mb='0' htmlFor="isInvalid">{t('traffic')}</FormLabel>
               <Switch onChange={(e)=>onChangeTraffic(e)} colorScheme="green"/>
             </Box>
             <Box display="flex">
-              <FormLabel mb='0' htmlFor="isInvalid">Toplu Taşıma</FormLabel>
+              <FormLabel mb='0' htmlFor="isInvalid">{t('publicTransport')}</FormLabel>
               <Switch onChange={(e)=>onChangeTransit(e)} colorScheme="green" />
             </Box>
           </HStack>

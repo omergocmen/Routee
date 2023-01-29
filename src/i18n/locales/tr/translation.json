@@ -27,5 +27,14 @@
   "mailSentSuccess":"Mail Başarıyla İletildi",
   "mailSentFail":"Mail İletilemedi",
   "routeNotDrawn":"Henüz Rota Çizilmemiş",
-  "chosenAsDestination":" varış noktası olarak seçildi"
+  "chosenAsDestination":" varış noktası olarak seçildi",
+  "validDestReq":"Lütfen Başlangıç Ve Bitiş Konumunuzu Doğru Giriniz",
+  "routeCouldNotCreated":"Böyle bir rota oluşturulamadı. Lütfen başlangıç, varış ve taşıt tipi seçimlerine dikkat edin",
+  "vehicleTypeNot":"Bu araç tipi şu an kullanılamıyor",
+  "traffic":"Trafik",
+  "publicTransport":"Toplu Taşıma",
+  "originSet":"Başlangıç Konumunuz Ayarlandı",
+  "listByProxy":"En Çok İlgili Gören Yerler Yakınlığa Göre Listelendi",
+  "proxyIconButton":"Yakınlık Esaslı Sıralama"
+  
 }

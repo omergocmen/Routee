@@ -94,8 +94,8 @@ export default function PoiListSection(props) {
       const lon=position.coords.longitude.toString()
       dispatch(getAllPoiByDistance({lat:lat,lon:lon}))
       toast({
-        title: "Bilgilendirme",
-        description:"En Çok İlgili Görenler Yakınlığa Göre Listelendi",
+        title: t('info'),
+        description:t('listByProxy'),
         status: "success",
         duration: 2000,
         isClosable: true,
@@ -131,7 +131,7 @@ export default function PoiListSection(props) {
           fontSize='20px'
           icon={<FaClock />}
           onClick={()=>getItemByDistance()}
-          title="Mesafe Bazlı Sıralama"
+          title= {t('proxyIconButton')}
         />
       </Box>
       <Box px="15px" py="5px" overflowY="visible">

@@ -27,5 +27,13 @@
     "mailSentSuccess":"Mail Sent Successfully",
     "mailSentFail":"Mail Could Not Be Delivered",
     "routeNotDrawn":"Route Not Drawn Yet",
-    "chosenAsDestination":" selected as destination"
+    "chosenAsDestination":" selected as destination",
+    "validDestReq":"Please Enter Your Origin And Destination Location Correctly",
+    "routeCouldNotCreated":"Could not create such a route. Please pay attention to origin, destination and vehicle type selections",
+    "vehicleTypeNot":"This vehicle type is currently unavailable",
+    "traffic":"Traffic",
+    "publicTransport":"Public transport",
+    "originSet":"Your Origin Location is Set",
+    "listByProxy":"Most Interested Places Listed by Proximity",
+    "proxyIconButton":"Proximity Based Sorting"
   }
