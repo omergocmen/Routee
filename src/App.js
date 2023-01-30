@@ -433,6 +433,9 @@ function App() {
         zIndex="1"
       >
         <div id="sidebar"/>
+        <Box marginX="5px" borderRadius="15px" bg="#FFFFFF">
+            <Image src={logo} m="auto" width={"150px"} borderRadius="15px" alt='Routee' />
+        </Box>
       </Box>
     </Flex>
   );
