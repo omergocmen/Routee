@@ -17,6 +17,7 @@ import {
   SkeletonText,
   Text,
   useToast,
+  Image,
 } from "@chakra-ui/react";
 
 import {
@@ -49,6 +50,9 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { register } from "./store/deviceSlice";
 import { saveDeviceHistory } from "./store/deviceHistorySlice";
+import logo from "./logo.png";
+
+const libraries = JSON.parse(process.env.REACT_APP_MAP_LIB);
 
 function App() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -59,10 +63,9 @@ function App() {
   const [visiblePanel, setVisiblePanel] = useState("hidden");
   const [transitLayer,setTransitLayer] = useState(false);
   const [trafficLayer,setTrafficLayer] = useState(false);
-
+  const [sidebar,setSidebar] = useState(null);
   const { t } = useTranslation();
 
-  const sidebar = document.getElementById("sidebar");
   const originRef = useRef();
   const destiantionRef = useRef();
   const toast = useToast();
@@ -77,9 +80,14 @@ function App() {
   }, []);
 
 
+  useEffect(() => {
+      setSidebar(document.getElementById("sidebar"));
+  }, [JSON.stringify(directionsResponse)])
+  
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
-    libraries: JSON.parse(process.env.REACT_APP_MAP_LIB),
+    libraries: libraries,
   });
   if (!isLoaded) {
     return <SkeletonText />;
@@ -261,14 +269,17 @@ function App() {
         p={4}
         borderRadius="lg"
         marginX="auto"
-        minH="170px"
-        maxH="18%"
+        minH="200px"
+        maxH="20%"
         bgColor="white"
         shadow="base"
         minW="container.md"
         zIndex="1"
       >
         <HStack spacing={2} justifyContent="space-between">
+          <Box marginX="5px">
+            <Image src={logo} width={"75px"} borderRadius="10px" alt='Routee' />
+          </Box>
           <Box flexGrow={1}>
             <Autocomplete>
               <Input type="text" placeholder={t("origin")} ref={originRef} />
@@ -290,11 +301,12 @@ function App() {
             </Autocomplete>
           </Box>
           <ButtonGroup>
-            <Button colorScheme="pink" type="submit" onClick={calculateRoute}>
+            <Button bg="#FF6666" type="submit" onClick={calculateRoute}>
               {t("calculateRoute")}
             </Button>
             <IconButton
               aria-label="center back"
+              title="Her Şeyi Temizle"
               icon={<FaTimes />}
               onClick={clearRoute}
             />
@@ -315,7 +327,7 @@ function App() {
               isRound
               bg={
                 travelMode === google.maps.TravelMode.TRANSIT
-                  ? "blue.200"
+                  ? "#FF6666"
                   : null
               }
               onClick={() => {
@@ -325,7 +337,7 @@ function App() {
             <IconButton
               bg={
                 travelMode === google.maps.TravelMode.DRIVING
-                  ? "blue.200"
+                  ? "#FF6666"
                   : null
               }
               icon={<FaCar />}
@@ -339,7 +351,7 @@ function App() {
               isRound
               bg={
                 travelMode === google.maps.TravelMode.WALKING
-                  ? "blue.200"
+                  ? "#FF6666"
                   : null
               }
               onClick={() => {
@@ -382,7 +394,7 @@ function App() {
       >
         <AccordionItem>
           <Heading>
-            <AccordionButton bg="yellow.300" justifyContent="center">
+            <AccordionButton bg="#FF6666" justifyContent="center">
               <Box as="span">{t("popularDestinations")}</Box>
               <AccordionIcon />
             </AccordionButton>

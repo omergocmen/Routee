@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Heading, IconButton, List, ListItem, Select, Text, useToast } from "@chakra-ui/react";
-import { FaShoppingBasket,FaSeedling,FaMosque,FaLandmark,FaClock } from "react-icons/fa";
+import { FaShoppingBasket,FaSeedling,FaMosque,FaLandmark, FaFilter} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPoi, getAllPoiByDistance} from "../store/poiSlice";
 import { useTranslation } from "react-i18next";
@@ -70,19 +70,19 @@ export default function PoiListSection(props) {
   function getIcon(item){
     if(item.poiType=="MUSEUM"){
       return(
-        <FaLandmark fontSize="20px" />
+        <FaLandmark id="myicon" fontSize="20px"/>
       )
     }else if(item.poiType=="AVM"){
       return(
-        <FaShoppingBasket fontSize="20px" />
+        <FaShoppingBasket id="myicon" fontSize="20px"/>
       )
     }else if (item.poiType=="MOSQUE"){
       return(
-        <FaMosque fontSize="20px" />
+        <FaMosque id="myicon" fontSize="20px"/>
       )
     }else{
       return (
-        <FaSeedling fontSize="20px" />
+        <FaSeedling id="myicon" fontSize="20px"/>
       )
     }
     
@@ -129,7 +129,7 @@ export default function PoiListSection(props) {
         </Select>
         <IconButton w={"20%"}
           fontSize='20px'
-          icon={<FaClock />}
+          icon={<FaFilter />}
           onClick={()=>getItemByDistance()}
           title= {t('proxyIconButton')}
         />

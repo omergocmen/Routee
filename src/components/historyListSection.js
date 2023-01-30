@@ -21,7 +21,7 @@ export default function HistoryListSection(props) {
     props.destinaton.current.value=historyItem.name;
     toast({
       title: t('info'),
-      description: poi.name+ t('chosenAsDestination'),
+      description:historyItem.name+" "+t('chosenAsDestination'),
       status: "success",
       duration: 2000,
       isClosable: true,

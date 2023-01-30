@@ -40,6 +40,22 @@
 #sidebar{
   width: "100%";
   padding: 3px;
+  border-radius: 10px;
   font-size: medium;
   height: "100%";
+}
+
+#myicon{
+  min-width: 20px;
+}
+
+.adp-list{
+  word-break: break-all !important;
+  background-color: #eaf0f7 !important;
+}
+.adp-listsel{
+  background-color: #ffffff !important;
+  border-radius: 4px !important;
+  padding: 2px !important;
+
 }

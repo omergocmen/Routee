@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Modal,
@@ -12,7 +12,6 @@ import {
   useDisclosure,
   FormControl,
   FormLabel,
-  FormHelperText,
   Input,
   useToast,
 } from "@chakra-ui/react";
@@ -30,11 +29,12 @@ export default function EmailModalItem() {
   const finalRef = React.useRef(null);
   const toast = useToast();
 
-  function sendMailRoute() {
-      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-      console.log(regex.test(initialRef.current.value));
 
-    if (initialRef.current.value == "") {
+  
+  function sendMailRoute() {
+
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if (initialRef.current.value == "" || !regex.test(initialRef.current.value)) {
       toast({
         title: t('info'),
         description: t('emailRequired'),
@@ -46,12 +46,13 @@ export default function EmailModalItem() {
     }
 
     const param = queryString.parse(location.search);
-
     if (location.search != "" && param.origin && param.destination) {
+      const mailItemText = document.getElementsByClassName("adp-directions")[0].innerText
       sendMail({
         toEmail: initialRef.current.value,
         startLocationName: param?.origin,
         endLocationName: param?.destination,
+        body:mailItemText,
         routeDetail: location.href,
       },t('Language'))
         .then((response) => {
