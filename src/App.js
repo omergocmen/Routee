@@ -281,7 +281,7 @@ function App() {
             <Image src={logo} width={"75px"} borderRadius="10px" alt='Routee' />
           </Box>
           <Box flexGrow={1}>
-            <Autocomplete>
+          <Autocomplete restrictions={{ country: "tr" }}>
               <Input type="text" placeholder={t("origin")} ref={originRef} />
             </Autocomplete>
           </Box>
@@ -292,7 +292,7 @@ function App() {
             icon={<FaSearchLocation />}
           />
           <Box flexGrow={1}>
-            <Autocomplete>
+          <Autocomplete restrictions={{ country: "tr" }}>
               <Input
                 type="text"
                 placeholder={t("destination")}
